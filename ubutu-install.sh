@@ -42,7 +42,7 @@ sudo apt-get update || OwnError "Updating Cache Failed :("
 #Install Common Softwares
 clear
 echo "Installing Git Vim Filezilla Google-Chrome Skype Oracle-Jdk"
-sudo apt-get -y install git-core vim vlc filezilla google-chrome-stable skype openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
+sudo apt-get -y install git-core openssh-server vim vlc filezilla google-chrome-stable skype openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
 
 
 #Install Web Server
