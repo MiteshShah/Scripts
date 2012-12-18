@@ -32,6 +32,10 @@ clear
 echo "Install Repository For XAMPP..."
 sudo add-apt-repository ppa:upubuntu-com/web || OwnError "Unable To Add XAMP Repository  :("
 
+#Shutter Repository
+clear
+echo "Install Repository For Shutter..."
+sudo add-apt-repository ppa:shutter/ppa || OwnError "Unable To Add Shutter Repository  :("
 
 #Update The Cache
 clear
@@ -42,7 +46,7 @@ sudo apt-get update || OwnError "Updating Cache Failed :("
 #Install Common Softwares
 clear
 echo "Installing Git Vim Filezilla Google-Chrome Skype Oracle-Jdk"
-sudo apt-get -y install git-core openssh-server vim vlc filezilla google-chrome-stable skype openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
+sudo apt-get -y install git-core openssh-server shutter vim vlc filezilla google-chrome-stable skype openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
 
 
 #Install Web Server
