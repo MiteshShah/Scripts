@@ -43,14 +43,14 @@ MYSQLADMIN=/usr/bin/mysqladmin
 ### SETUP MySQL LOGIN ###
 if [ -f ~/.my.cnf ]
 then
-	MYSQLUSER=$(cat ~/.my.cnf | grep user | cut -d'=' -f2)
-	MYSQLPASS=$(cat ~/.my.cnf | grep pass | cut -d'=' -f2)
+	MySQLUSER=$(cat ~/.my.cnf | grep user | cut -d'=' -f2)
+	MySQLPASS=$(cat ~/.my.cnf | grep pass | cut -d'=' -f2)
 else
-	read -p "Enter The MySQL Username: " MYSQLUSER
+	read -p "Enter The MySQL Username: " MySQLUSER
 
 	# Turn Off Echo For Passwords
 	stty -echo
-	read -p "Enter The MySQL Password: " MYSQLPASS
+	read -p "Enter The MySQL Password: " MySQLPASS
 	stty echo
 	echo
 fi
