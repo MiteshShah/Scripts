@@ -1,18 +1,27 @@
 #!/bin/bash
 
-# Checking Disk Uses
-df -H | grep -vE '^Filesystem|tmpfs|cdrom' | awk '{ print $5 " " $1 }' | while read output;
+
+
+USEDSPACE=$(df -h | awk '{print $5}' | grep -vi use | cut -d'%' -f1)
+for i in $USEDSPACE
 do
-
-	echo $output
-	uses=$(echo $output | awk '{ print $1}' | cut -d'%' -f1  )
-	partition=$(echo $output | awk '{ print $2 }' )
-
-	# Send Mails On Low Disk Space
-	if [ $uses -ge 90 ]
+	if [ $i -gt 90 ]
 	then
-		echo "Running Out Of Space \"$partition ($uses%)\" On $(hostname) As On $(date)" \
-		| mail -s "Alert: Almost Out Of Disk Space $uses% On $(hostname)" Mitesh.Shah@rtCamp.com
-	fi
+		(df -h | head -n1; df -h | grep $i; \
+		echo; echo "Total Disk Space Used By /tmp = $(du -sh /tmp | awk '{print$1}')" \
+		echo; echo "Total Disk Space Used By /var/log = $(du -sh /var/log | awk '{print$1}')") \
+		| mail -s "HDD Space Warning For $(hostname)" Mitesh.Shah@rtcamp.com
 
+	elif [ $i -gt 85 ]
+	then
+		(df -h | head -n1; df -h | grep $i) \
+		| mail -s "HDD Space Warning For $(hostname)" Mitesh.Shah@rtcamp.com
+
+	elif [ $i -gt 80 ]
+	then
+		(df -h | head -n1; df -h | grep $i) \
+		| mail -s "HDD Space Warning For $(hostname)" Mitesh.Shah@rtcamp.com
+
+	fi
 done
+
