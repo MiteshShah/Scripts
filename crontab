@@ -1,0 +1,19 @@
+# Start Monitoring SSH Authorised Keys
+@reboot		/bin/bash /root/scripts/monitor-ssh-keys.sh &
+
+#Check HDD Space
+@daily	/root/scripts/hddspace.sh
+
+#Run Rsnapshot At 02:00 Everyday
+00      02      *       *       *       /usr/bin/rsnapshot daily
+
+#Run Rsnapshot At 06:00 Every Sunday 
+00      06      *       *       0       /usr/bin/rsnapshot weekly
+
+# Correct WebRoot Permissions
+0	2	*	*	*	/bin/bash /root/scripts/correct-webroot-permission.sh
+
+# ClamAV Scan
+10	2	*	*	*	clamscan -r -i / | mail -s "ClamAv Scan Result For `hostname`"  Mitesh.Shah@rtcamp.com
+
+
