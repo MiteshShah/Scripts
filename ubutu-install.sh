@@ -10,6 +10,10 @@ OwnError()
 }
 
 
+# Unhide Startup
+sudo sed -i "s/NoDisplay=true/NoDisplay=false/g" /etc/xdg/autostart/*.desktop
+
+
 # Install Apt-Add-Repository Python Tool
 sudo apt-get install python-software-properties || OwnError "Unable To Install Python Software Properties :(" 
 
