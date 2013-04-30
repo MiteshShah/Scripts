@@ -58,7 +58,7 @@ echo "Downloading Netbeans..."
 wget -c http://dlc.sun.com.edgesuite.net/netbeans/7.3/final/bundles/netbeans-7.3-php-linux.sh || OwnError "Unable to download Netbeans :("
 chmod u+x netbeans-7.3-php-linux.sh
 echo "Installing Netbeans..."
-sudo ./netbeans-7.3-php-linux.sh || OwnError "Unable to install Netbeans :("
+sudo bash netbeans-7.3-php-linux.sh || OwnError "Unable to install Netbeans :("
 clear
 echo "All Task Susscessfully Finished........"
 
