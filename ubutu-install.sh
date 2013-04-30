@@ -48,6 +48,16 @@ clear
 echo "Installing Git Vim Filezilla Google-Chrome Skype Oracle-Jdk"
 sudo apt-get -y install git-core openssh-server shutter vim vlc curl filezilla google-chrome-stable skype openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
 
+#Install Netbeans
+clear
+echo "Downloading Netbeans..."
+wget -c http://dlc.sun.com.edgesuite.net/netbeans/7.3/final/bundles/netbeans-7.3-php-linux.sh || OwnError "Unable to download Netbeans :("
+chmod u+x netbeans-7.3-php-linux.sh
+echo "Installing Netbeans..."
+sudo ./netbeans-7.3-php-linux.sh || OwnError "Unable to install Netbeans :("
+clear
+echo "All Task Susscessfully Finished........"
+
 
 #Install Web Server
 clear
@@ -81,14 +91,3 @@ then
     sudo apt-get -y install nginx php5-common php5-mysql php5-xmlrpc php5-cgi php5-curl php5-gd php5-cli php5-fpm php-apc php-pear php5-dev php5-imap php5-mcrypt mysql-server mysqltuner || OwnError "Nginx Server Installation Failed :("
 fi
 
-
-#Install Netbeans
-clear
-echo "Downloading Netbeans..."
-wget -c http://download.netbeans.org/netbeans/7.2/final/bundles/netbeans-7.2-ml-php-linux.sh || OwnError "Unable to download Netbeans :("
-chmod u+x netbeans-7.2-ml-php-linux.sh
-echo "Installing Netbeans..."
-sudo ./netbeans-7.2-ml-php-linux.sh || OwnError "Unable to install Netbeans :("
-sudo rm netbeans-7.2-ml-php-linux.sh
-clear
-echo "All Task Susscessfully Finished........"
