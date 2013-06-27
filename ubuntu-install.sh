@@ -69,7 +69,9 @@ echo "All Task Susscessfully Finished........"
 
 
 #Install Web Server
-curl -sL rt.cx/ee | sudo bash
+curl -sL rt.cx/ee | sudo bash || OwnError "Unable to clone ee :("
+source /etc/bash_completion.d/ee || OwnError "Unable to source ee autocompletion :("
+ee system install all || OwnError "Unable to install ee system install all :("
 #clear
 #echo "Select The Webserver You Want To Install..."
 #OPTIONS=$(echo "LAMP XAMP Nginx")
