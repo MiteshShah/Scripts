@@ -1,6 +1,6 @@
 #!/bin/sh
 SHORTCUT="[Desktop Entry]
-Name=Sublime Text 2.0.1
+Name=Sublime Text 2.0.2
 Comment=Edit Text Files
 Exec=/opt/sublime-text-2/sublime_text
 Icon=/opt/sublime-text-2/Icon/128x128/sublime_text.png
@@ -18,8 +18,8 @@ else
 fi"
 
 cd /opt/
-wget -c http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.1%20x64.tar.bz2
-tar -xvjf "Sublime Text 2.0.1 x64.tar.bz2"
+wget -c http://c758482.r82.cf2.rackcdn.com/Sublime%20Text%202.0.2%20x64.tar.bz2
+tar -xvjf "Sublime Text 2.0.2 x64.tar.bz2"
 mv /opt/"Sublime Text 2" /opt/sublime-text-2
 
 echo "${SCRIPT}" > "/usr/local/bin/subl"
