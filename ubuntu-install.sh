@@ -33,7 +33,7 @@ sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc
 #Skype Repository 
 clear
 echo "Install Repository For Skype..."
-echo 'deb http://archive.canonical.com/ubuntu/ raring partner' >> /etc/apt/sources.list.d/canonical_partner.list || OwnError "Unable To Add Skype Repository  :("
+sudo sh -c  'echo "deb http://archive.canonical.com/ubuntu/ raring partner" >> /etc/apt/sources.list.d/canonical_partner.list' || OwnError "Unable To Add Skype Repository  :("
 
 #sudo add-apt-repository ppa:upubuntu-com/chat || OwnError "Unable To Add Skype Repository  :("
 
