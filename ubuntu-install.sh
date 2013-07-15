@@ -31,8 +31,10 @@ sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc
 
 
 #Skype Repository 
-#clear
-#echo "Install Repository For Skype..."
+clear
+echo "Install Repository For Skype..."
+echo 'deb http://archive.canonical.com/ubuntu/ raring partner' >> /etc/apt/sources.list.d/canonical_partner.list || OwnError "Unable To Add Skype Repository  :("
+
 #sudo add-apt-repository ppa:upubuntu-com/chat || OwnError "Unable To Add Skype Repository  :("
 
 
@@ -55,7 +57,7 @@ sudo apt-get update || OwnError "Updating Cache Failed :("
 #Install Common Softwares
 clear
 echo "Installing Git Vim Filezilla Google-Chrome Skype Oracle-Jdk"
-sudo apt-get -y install git-core openssh-server shutter vim vlc curl filezilla google-chrome-stable sni-qt sni-qt:i386 libasound2-plugins:i386 openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
+sudo apt-get -y install git-core openssh-server shutter vim vlc curl filezilla google-chrome-stable skype sni-qt sni-qt:i386 libasound2-plugins:i386 openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
 
 #Install Netbeans
 clear
