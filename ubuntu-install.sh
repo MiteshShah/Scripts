@@ -55,7 +55,7 @@ sudo apt-get update || OwnError "Updating Cache Failed :("
 #Install Common Softwares
 clear
 echo "Installing Git Vim Filezilla Google-Chrome Skype Oracle-Jdk"
-sudo apt-get -y install git-core openssh-server shutter vim vlc curl filezilla google-chrome-stable sni-qt sni-qt:i386 openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
+sudo apt-get -y install git-core openssh-server shutter vim vlc curl filezilla google-chrome-stable sni-qt sni-qt:i386 libasound2-plugins:i386 openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
 
 #Install Netbeans
 clear
