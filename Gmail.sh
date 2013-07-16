@@ -7,7 +7,7 @@
 GMAILUSER=GmailUserName
 GMAILPASS='GmailPasswprd'
 
-curl -u $GMAILUSER:$GMAILPASS https://mail.google.com/mail/feed/atom > /tmp/GmailChecker
+curl -su $GMAILUSER:$GMAILPASS https://mail.google.com/mail/feed/atom > /tmp/GmailChecker
 COUNT=`cat /tmp/GmailChecker | grep fullcount | cut -d'>' -f2 | cut -d '<' -f1`
 
 if [ "$COUNT" -ge "1" ]
