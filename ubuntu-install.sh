@@ -29,6 +29,11 @@ echo "Install Repository For Google..."
 wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - || OwnError "Unable To Fetch Google Repository  :("
 sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list' || OwnError "Unable To Add Google Repository  :("
 
+#Opera Repository 
+clear
+echo "Install Repository For Opera..."
+wget -q -O - http://deb.opera.com/archive.key | sudo apt-key add - || OwnError "Unable To Fetch Opera Repository  :("
+sudo sh -c 'echo "deb http://deb.opera.com/opera/ stable non-free" >> /etc/apt/sources.list.d/opera.list' || OwnError "Unable To Add Opera Repository  :("
 
 #Skype Repository 
 clear
