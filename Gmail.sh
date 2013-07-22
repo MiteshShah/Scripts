@@ -19,6 +19,7 @@ then
 		SUMMARY=`cat /tmp/GmailChecker | grep summary | sed -n $i\p | cut -d'>' -f2 \
 		| cut -d '<' -f1`
 		notify-send --icon kmail "($i/$COUNT) $TITLE <br><br> $SUMMARY"
+		sleep 5s;
 	done
 else
 	notify-send --icon kmail "No New Mails"
