@@ -1,19 +1,25 @@
 # Start Monitoring SSH Authorised Keys
 @reboot		/bin/bash /root/bin/monitor-ssh-keys.sh &
 
-#Check HDD Space
-@daily	/bin/bash /root/bin/hddspace.sh
-
 # Sync Webroot
 @reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
+
+#Check HDD Space
+@daily	/bin/bash /root/bin/hddspace.sh
 
 # Correct WebRoot Permissions
 0	2	*	*	*	/bin/bash /root/bin/fixpermission.sh
 
 
-
 # ClamAV Scan
 10	2	*	*	*	clamscan -r -i / | mail -s "ClamAv Scan Result For `hostname`"  Mitesh.Shah@rtcamp.com
+
+
+# Rsnapshot MySQL Script
+30      4       *       *       *       /bin/bash /root/bin/rsnap-mysql.sh
+
+#Run Rsnapshot At EveryHour
+00      *      *       *       *       /usr/bin/rsnapshot hourly
 
 #Run Rsnapshot At 02:00 Everyday
 00      02      *       *       *       /usr/bin/rsnapshot daily
