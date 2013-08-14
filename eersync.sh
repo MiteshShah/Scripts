@@ -23,9 +23,7 @@ MYSQLPASS=$(grep DB_PASS /var/www/$DOMAIN/wp-config.php | cut -d"'" -f4)
 echo -e " ============================================================\n `date` \n" | tee -ai $ERRORLOG
 echo -e " WPDBNAME = $WPDBNAME \n MYSQLUSER = $MYSQLUSER \n MYSQLPASS = $MYSQLPASS" | tee -ai $ERRORLOG
 
-
-
-echo "Take MySQL Dump: "
+echo -e "\033[34m Taking MySQL Dump...  \e[0m"
 rm -rf /var/www/$DOMAIN/backup
 mkdir -p /var/www/$DOMAIN/backup
 mysqldump -u $MYSQLUSER -p$MYSQLPASS $WPDBNAME > /var/www/$DOMAIN/backup/$WPDBNAME.sql || OwnError "Unable To Dump MySQL For $WPDBNAME"
@@ -35,13 +33,14 @@ echo
 echo
 echo
 echo
-echo "We need some details of destination server:"
+echo "Required destination server details:"
 read -p "Enter Usernames: " DESTUSER
 read -p "Enter Destination IP: " DESTIP
 read -p "Enter Destination PORT: " DESTPORT
 read -p "Enter Destination Domain Name To rsync: " DESTDOMAIN
 
 # Lets Import MySQL
+echo -e "\033[34m Fetching destination DB Name, DB User and DB Password...  \e[0m"
 DESTDBNAME=$(ssh $DESTUSER@$DESTIP -p $DESTPORT "grep DB_NAME /var/www/$DESTDOMAIN/wp-config.php" | cut -d"'" -f4)
 DESTDBUSER=$(ssh $DESTUSER@$DESTIP -p $DESTPORT "grep DB_USER /var/www/$DESTDOMAIN/wp-config.php" | cut -d"'" -f4)
 DESTDBPASS=$(ssh $DESTUSER@$DESTIP -p $DESTPORT "grep DB_PASS /var/www/$DESTDOMAIN/wp-config.php" | cut -d"'" -f4)
@@ -55,20 +54,21 @@ then
 	echo
 	echo
 	echo
-	echo "Please wait..."
+	echo -e "\033[34m Please Wait...  \e[0m"
 	rsync -avzh /var/www/$DOMAIN/htdocs /var/www/$DOMAIN/backup/$WPDBNAME.sql $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/
 
-	echo "Import MySQL, Please wait..."
+	echo -e "\033[34m Import MySQL, Please Wait...  \e[0m"
 	ssh $DESTUSER@$DESTIP -p $DESTPORT "mysql -u $DESTDBUSER -p$DESTDBPASS $DESTDBNAME < /var/www/$DESTDOMAIN/$WPDBNAME.sql"
 	echo
 	echo
 	echo
 	echo
-	echo "Add following lines to wp-config.php file"
+	echo "Add following lines to http://$DESTDOMAIN/wp-config.php file."
 	echo
 	echo "define( 'WP_HOME', 'http://$DESTDOMAIN/' );"
 	echo "define( 'WP_SITEURL', 'http://$DESTDOMAIN/' );"
+	echo
 else
 	# User Denied Messages
-	echo -e "\033[31m User Denied To rsync $DOMAIN To $DESTDOMAIN. \e[0m"
+	echo -e "\033[31m User Denied rsync from $DOMAIN to $DESTDOMAIN. \e[0m"
 fi
