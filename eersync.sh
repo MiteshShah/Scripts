@@ -19,6 +19,8 @@ read -p "Enter Source Domain Name To rsync: " DOMAIN
 WPDBNAME=$(grep DB_NAME /var/www/$DOMAIN/wp-config.php | cut -d"'" -f4)
 MYSQLUSER=$(grep DB_USER /var/www/$DOMAIN/wp-config.php | cut -d"'" -f4)
 MYSQLPASS=$(grep DB_PASS /var/www/$DOMAIN/wp-config.php | cut -d"'" -f4)
+
+echo -e " ============================================================\n `date` \n" | tee -ai $ERRORLOG
 echo -e " WPDBNAME = $WPDBNAME \n MYSQLUSER = $MYSQLUSER \n MYSQLPASS = $MYSQLPASS" | tee -ai $ERRORLOG
 
 
@@ -44,7 +46,7 @@ DESTDBNAME=$(ssh $DESTUSER@$DESTIP -p $DESTPORT "grep DB_NAME /var/www/$DESTDOMA
 DESTDBUSER=$(ssh $DESTUSER@$DESTIP -p $DESTPORT "grep DB_USER /var/www/$DESTDOMAIN/wp-config.php" | cut -d"'" -f4)
 DESTDBPASS=$(ssh $DESTUSER@$DESTIP -p $DESTPORT "grep DB_PASS /var/www/$DESTDOMAIN/wp-config.php" | cut -d"'" -f4)
 
-echo -e " DESTDBNAME = $DESTDBNAME \n DESTDBUSER = $DESTDBUSER \n DESTDBPASS = $DESTDBPASS" | tee -ai $ERRORLOG
+echo -e " DESTIP = $DESTIP \n DESTDBNAME = $DESTDBNAME \n DESTDBUSER = $DESTDBUSER \n DESTDBPASS = $DESTDBPASS" | tee -ai $ERRORLOG
 read -p "Are You Sure To rsync $DOMAIN To $DESTDOMAIN (y/n): " ANSWER
 
 if [ "$ANSWER" = "y" ]
