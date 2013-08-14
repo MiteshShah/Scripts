@@ -2,11 +2,6 @@
 # This code is later added into easyengine migrate command
 # Developed by Mitesh Shah & Manish Songirkar
 
-
-
-
-
-
 ERRORLOG=/var/log/eersync.log
 
 # Capture Errors
