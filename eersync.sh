@@ -66,8 +66,14 @@ read -p " Are You Sure To rsync $DOMAIN To $DESTDOMAIN (y/n): " ANSWER
 if [ "$ANSWER" == "y" ]
 then
 	echo -e "\033[34m Sync $DOMAIN To $DESTDOMAIN, Please Wait...  \e[0m"
-	rsync -avzh /var/www/$DOMAIN/htdocs /var/www/$DOMAIN/backup/$WPDBNAME.sql $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/ || OwnError "Unable To Sync $DOMAIN To $DESTDOMAIN"
+	read -p "  Do You Want To Exclude Upload Directory (y/n): " EXCLUDEDIR
 
+	if [ "$EXCLUDEDIR" == "y" ]
+	then
+		rsync -avzh --exclude="wp-content/uploads/"  /var/www/$DOMAIN/htdocs /var/www/$DOMAIN/backup/$WPDBNAME.sql $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/ || OwnError "Unable To Sync $DOMAIN To $DESTDOMAIN"
+	else
+		rsync -avzh /var/www/$DOMAIN/htdocs /var/www/$DOMAIN/backup/$WPDBNAME.sql $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/ || OwnError "Unable To Sync $DOMAIN To $DESTDOMAIN"
+	fi
 	echo -e "\033[34m Importing MySQL, Please Wait...  \e[0m"
 	ssh $DESTUSER@$DESTIP -p $DESTPORT "mysql -u $DESTDBUSER -p$DESTDBPASS $DESTDBNAME < /var/www/$DESTDOMAIN/$WPDBNAME.sql" || OwnError "Unable To Import MySQL On $DESTDOMAIN"
 	ssh $DESTUSER@$DESTIP -p $DESTPORT "rm -f /var/www/$DESTDOMAIN/$WPDBNAME.sql" || OwnError "Unable To Remove MySQL Backup File $WPDBNAME.sql"
