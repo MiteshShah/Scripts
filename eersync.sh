@@ -32,7 +32,7 @@ echo -e "\033[34m Taking MySQL Dump, Please Wait...  \e[0m"
 mkdir -p /var/www/$DOMAIN/backup
 rm -rf /var/www/$DOMAIN/backup/$WPDBNAME.sql
 
-mysqldump -u $MYSQLUSER -p$MYSQLPASS $WPDBNAME > /var/www/$DOMAIN/backup/$WPDBNAME.sql || OwnError "Unable To Dump MySQL For $WPDBNAME"
+mysqldump --max_allowed_packet=512M -u $MYSQLUSER -p$MYSQLPASS $WPDBNAME > /var/www/$DOMAIN/backup/$WPDBNAME.sql || OwnError "Unable To Dump MySQL For $WPDBNAME"
 
 
 # Destination Domain
