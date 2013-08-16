@@ -66,7 +66,7 @@ read -p " Are You Sure To rsync $DOMAIN To $DESTDOMAIN (y/n): " ANSWER
 if [ "$ANSWER" == "y" ]
 then
 	echo -e "\033[34m Sync $DOMAIN To $DESTDOMAIN, Please Wait...  \e[0m"
-	read -p "  Do You Want To Exclude Upload Directory (y/n): " EXCLUDEDIR
+	read -p " Do You Want To Exclude Upload Directory (y/n): " EXCLUDEDIR
 
 	if [ "$EXCLUDEDIR" == "y" ]
 	then
@@ -82,8 +82,7 @@ then
 	echo -e "\033[1;33m \n define( 'WP_HOME', 'http://$DESTDOMAIN/' ); \n define( 'WP_SITEURL', 'http://$DESTDOMAIN/' ); \e[0m"
 	echo -e "IMPORTANT: Don't Forget To Use Search & Replace Plugin"
 
-elif [ "$ANSWER" == "n" ]
-then
+else
 	# User Denied Messages
 	echo
 	echo -e "\033[31m User Denied rsync from $DOMAIN to $DESTDOMAIN \e[0m" | tee -ai $ERRORLOG
