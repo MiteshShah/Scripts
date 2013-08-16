@@ -2,6 +2,13 @@
 
 
 ERRORLOG=/var/log/eersync.log
+# Checking Linux Distro Is Ubuntu
+if [ ! -f $ERRORLOG ]
+then
+	echo -e "\033[31m Please Create eersync.log File Using Following Commands: \e[0m"
+	echo -e "\033[34m sudo touch $ERRORLOG; sudo chmod 666 $ERRORLOG \e[0m"
+	exit 100
+fi
 # Capture Errors
 OwnError()
 {
