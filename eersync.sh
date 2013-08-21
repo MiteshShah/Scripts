@@ -59,12 +59,14 @@ fi
 
 # Lets Import MySQL
 echo -e "\033[34m Fetching Destination DB Name, DB User & DB Password...  \e[0m"
-rm -f /tmp/wp-config.php
+rm -f /tmp/*-wp-config.php
 rsync -avzh $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/wp-config.php /tmp/ || OwnError "Unable To Fetch wp-config.php From $DESTDOMAIN"
 
-DESTDBNAME=$(grep DB_NAME /tmp/wp-config.php | cut -d"'" -f4)
-DESTDBUSER=$(grep DB_USER /tmp/wp-config.php | cut -d"'" -f4)
-DESTDBPASS=$(grep DB_PASS /tmp/wp-config.php | cut -d"'" -f4)
+mv /tmp/wp-config.php /tmp/$DESTDOMAIN-wp-config.php
+
+DESTDBNAME=$(grep DB_NAME /tmp/$DESTDOMAIN-wp-config.php | cut -d"'" -f4)
+DESTDBUSER=$(grep DB_USER /tmp/$DESTDOMAIN-wp-config.php | cut -d"'" -f4)
+DESTDBPASS=$(grep DB_PASS /tmp/$DESTDOMAIN-wp-config.php | cut -d"'" -f4)
 
 echo -e " DESTIP = $DESTIP \n DESTDBNAME = $DESTDBNAME \n DESTDBUSER = $DESTDBUSER \n DESTDBPASS = $DESTDBPASS" | tee -ai $ERRORLOG
 
