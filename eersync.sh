@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Usage : First Run following Command
+# cd /tmp; wget -c https://raw.github.com/MiteshShah/Scripts/master/eersync.sh
+# cd /tmp; bash eersync.sh
 
 ERRORLOG=/var/log/eersync.log
 # Checking Linux Distro Is Ubuntu
@@ -62,6 +65,7 @@ echo -e "\033[34m Fetching Destination DB Name, DB User & DB Password...  \e[0m"
 rm -f /tmp/*-wp-config.php
 rsync -avzh $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/wp-config.php /tmp/ || OwnError "Unable To Fetch wp-config.php From $DESTDOMAIN"
 
+# Rename wp-config file name to avoid conflict
 mv /tmp/wp-config.php /tmp/$DESTDOMAIN-wp-config.php
 
 DESTDBNAME=$(grep DB_NAME /tmp/$DESTDOMAIN-wp-config.php | cut -d"'" -f4)
