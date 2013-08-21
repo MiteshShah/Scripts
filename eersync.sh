@@ -5,6 +5,7 @@
 # cd /tmp; bash eersync.sh
 
 ERRORLOG=/var/log/eersync.log
+
 # Checking Linux Distro Is Ubuntu
 if [ ! -f $ERRORLOG ]
 then
@@ -12,6 +13,7 @@ then
 	echo -e "\033[34m sudo touch $ERRORLOG; sudo chmod 666 $ERRORLOG \e[0m"
 	exit 100
 fi
+
 # Capture Errors
 OwnError()
 {
@@ -34,9 +36,7 @@ echo -e " DOMAIN = $DOMAIN \n WPDBNAME = $WPDBNAME \n MYSQLUSER = $MYSQLUSER \n 
 echo -e "\033[34m Taking MySQL Dump, Please Wait...  \e[0m"
 mkdir -p /var/www/$DOMAIN/backup
 rm -rf /var/www/$DOMAIN/backup/$WPDBNAME.sql
-
 mysqldump --max_allowed_packet=512M -u $MYSQLUSER -p$MYSQLPASS $WPDBNAME > /var/www/$DOMAIN/backup/$WPDBNAME.sql || OwnError "Unable To Dump MySQL For $WPDBNAME"
-
 
 # Destination Domain
 echo
@@ -62,18 +62,16 @@ fi
 
 # Lets Import MySQL
 echo -e "\033[34m Fetching Destination DB Name, DB User & DB Password...  \e[0m"
-rm -f /tmp/*-wp-config.php
 rsync -avzh $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/wp-config.php /tmp/ || OwnError "Unable To Fetch wp-config.php From $DESTDOMAIN"
 
 # Rename wp-config file name to avoid conflict
 mv /tmp/wp-config.php /tmp/$DESTDOMAIN-wp-config.php
 
+# Get Destination Database Name, Username and Password
 DESTDBNAME=$(grep DB_NAME /tmp/$DESTDOMAIN-wp-config.php | cut -d"'" -f4)
 DESTDBUSER=$(grep DB_USER /tmp/$DESTDOMAIN-wp-config.php | cut -d"'" -f4)
 DESTDBPASS=$(grep DB_PASS /tmp/$DESTDOMAIN-wp-config.php | cut -d"'" -f4)
-
 echo -e " DESTIP = $DESTIP \n DESTDBNAME = $DESTDBNAME \n DESTDBUSER = $DESTDBUSER \n DESTDBPASS = $DESTDBPASS" | tee -ai $ERRORLOG
-
 
 read -p " Are You Sure To rsync $DOMAIN To $DESTDOMAIN (y/n): " ANSWER
 
@@ -91,7 +89,7 @@ then
 	fi
 
 	# Ask for Import Database from Source to Destination
-	read -p " \n Do You Want to Import MySQL Database from $DOMAIN to $DESTDOMAIN (y/n): " DBIMPORT
+	read -p " Do You Want to Import MySQL Database from $DOMAIN to $DESTDOMAIN (y/n): " DBIMPORT
 	if [ "$DBIMPORT" == "y" ]
 	then
 		echo -e "\033[34m Importing MySQL, Please Wait...  \e[0m"
@@ -100,11 +98,13 @@ then
 		echo -e "\033[31m User Denied to Import Database from $DOMAIN to $DESTDOMAIN \n \e[0m" | tee -ai $ERRORLOG
 	fi
 
-	# Remove Database backup file from Destination
+	# Remove Config file from /tmp/ Directory and Database backup file from Destination
+	rm -f /tmp/$DESTDOMAIN-wp-config.php
 	ssh $DESTUSER@$DESTIP -p $DESTPORT "rm -f /var/www/$DESTDOMAIN/$WPDBNAME.sql" || OwnError "Unable To Remove MySQL Backup File $WPDBNAME.sql"
 
+	# Display Important Information After Completing rsync Process
 	echo -e "\033[34m For The First Time rsync, Add Following Lines To /var/www/$DESTDOMAIN/wp-config.php  \e[0m"
-	echo -e "\033[1;33m \n define( 'WP_HOME', 'http://$DESTDOMAIN/' ); \n define( 'WP_SITEURL', 'http://$DESTDOMAIN/' ); \e[0m"
+	echo -e "\033[1;33m \n define( 'WP_HOME', 'http://$DESTDOMAIN/' ); \n define( 'WP_SITEURL', 'http://$DESTDOMAIN/' ); \n \e[0m"
 	echo -e "IMPORTANT: Don't Forget To Use Search & Replace Plugin"
 
 else
