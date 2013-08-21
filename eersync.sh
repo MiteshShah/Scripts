@@ -74,16 +74,27 @@ read -p " Are You Sure To rsync $DOMAIN To $DESTDOMAIN (y/n): " ANSWER
 if [ "$ANSWER" == "y" ]
 then
 	echo -e "\033[34m Sync $DOMAIN To $DESTDOMAIN, Please Wait...  \e[0m"
+	
+	# Ask for Exclude Upload Directory
 	read -p " Do You Want To Exclude Upload Directory (y/n): " EXCLUDEDIR
-
 	if [ "$EXCLUDEDIR" == "y" ]
 	then
 		rsync -avzh --exclude="wp-content/uploads/"  /var/www/$DOMAIN/htdocs /var/www/$DOMAIN/backup/$WPDBNAME.sql $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/ || OwnError "Unable To Sync $DOMAIN To $DESTDOMAIN"
 	else
 		rsync -avzh /var/www/$DOMAIN/htdocs /var/www/$DOMAIN/backup/$WPDBNAME.sql $DESTUSER@$DESTIP:/var/www/$DESTDOMAIN/ || OwnError "Unable To Sync $DOMAIN To $DESTDOMAIN"
 	fi
-	echo -e "\033[34m Importing MySQL, Please Wait...  \e[0m"
-	ssh $DESTUSER@$DESTIP -p $DESTPORT "mysql -u $DESTDBUSER -p$DESTDBPASS $DESTDBNAME < /var/www/$DESTDOMAIN/$WPDBNAME.sql" || OwnError "Unable To Import MySQL On $DESTDOMAIN"
+
+	# Ask for Import Database from Source to Destination
+	read -p " \n Do You Want to Import MySQL Database from $DOMAIN to $DESTDOMAIN (y/n): " DBIMPORT
+	if [ "$DBIMPORT" == "y" ]
+	then
+		echo -e "\033[34m Importing MySQL, Please Wait...  \e[0m"
+		ssh $DESTUSER@$DESTIP -p $DESTPORT "mysql -u $DESTDBUSER -p$DESTDBPASS $DESTDBNAME < /var/www/$DESTDOMAIN/$WPDBNAME.sql" || OwnError "Unable To Import MySQL On $DESTDOMAIN"
+	else
+		echo -e "\033[31m User Denied to Import Database from $DOMAIN to $DESTDOMAIN \n \e[0m" | tee -ai $ERRORLOG
+	fi
+
+	# Remove Database backup file from Destination
 	ssh $DESTUSER@$DESTIP -p $DESTPORT "rm -f /var/www/$DESTDOMAIN/$WPDBNAME.sql" || OwnError "Unable To Remove MySQL Backup File $WPDBNAME.sql"
 
 	echo -e "\033[34m For The First Time rsync, Add Following Lines To /var/www/$DESTDOMAIN/wp-config.php  \e[0m"
