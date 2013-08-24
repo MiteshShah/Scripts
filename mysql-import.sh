@@ -12,6 +12,7 @@ OwnError()
 apt-get -y install pv || OwnError "Unable To Install PV"
 
 
+echo
 read -p "Database Pathe (/var/rsnap-mysql): " DBPATH
 
 # IF Enter Is Pressed
@@ -28,7 +29,7 @@ do
         read -p "Select Database For `basename $i`: " DB_NAME
         echo DBNAME = $DB_NAME 
         echo SQLFILE = $i
-        mysql -e "create database `$DBNAME`" || OwnError  "Unable To Create Database $DBANME"
+        mysql -e "create database \`$DBNAME\`" || OwnError  "Unable To Create Database $DBANME"
         pv $i | mysql $DB_NAME
 done
 
