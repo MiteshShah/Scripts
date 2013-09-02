@@ -166,7 +166,7 @@ then
 		# Add WP_HOME and WP_SITEURL to wp-config.php file
 		if ! grep --quiet WP_HOME /tmp/$MIGDESTDOMAIN-wp-config.php && ! grep --quiet WP_SITEURL /tmp/$MIGDESTDOMAIN-wp-config.php
 		then
-			ssh $MIGDESTUSER@$MIGDESTIP -p $MIGDESTDBPORT "echo -e \"define( 'WP_HOME', 'http://$MIGDESTDOMAIN' ); \ndefine( 'WP_SITEURL', 'http://$MIGDESTDOMAIN' ); \" >> /var/www/$MIGDESTDOMAIN/wp-config.php" || SyncError "Unable To Add WP_HOME and WP_SITEURL in /var/www/$MIGDESTDOMAIN/wp-config.php"
+			ssh $MIGDESTUSER@$MIGDESTIP -p $MIGDESTDBPORT "echo -e \"\ndefine( 'WP_HOME', 'http://$MIGDESTDOMAIN' ); \ndefine( 'WP_SITEURL', 'http://$MIGDESTDOMAIN' ); \" >> /var/www/$MIGDESTDOMAIN/wp-config.php" || SyncError "Unable To Add WP_HOME and WP_SITEURL in /var/www/$MIGDESTDOMAIN/wp-config.php"
 			echo -e "Added WP_HOME and WP_SITEURL to /var/www/$MIGDESTDOMAIN/wp-config.php"
 		fi
 
