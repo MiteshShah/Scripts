@@ -166,15 +166,12 @@ then
 		# Add WP_HOME and WP_SITEURL to wp-config.php file
 		if ! grep --quiet WP_HOME /tmp/$MIGDESTDOMAIN-wp-config.php && ! grep --quiet WP_SITEURL /tmp/$MIGDESTDOMAIN-wp-config.php
 		then
-			echo 
-			# Display Important Information After Completing rsync Process
-			echo -e "\033[34m For The First Time rsync, Add Following Lines To /var/www/$MIGDESTDOMAIN/wp-config.php  \e[0m"
-			echo -e "\033[1;33m \n define( 'WP_HOME', 'http://$MIGDESTDOMAIN' ); \n define( 'WP_SITEURL', 'http://$MIGDESTDOMAIN' ); \n \e[0m"
+			ssh $MIGDESTUSER@$MIGDESTIP -p $MIGDESTDBPORT "echo -e \"define( 'WP_HOME', 'http://$MIGDESTDOMAIN' ); \ndefine( 'WP_SITEURL', 'http://$MIGDESTDOMAIN' ); \" >> /var/www/$MIGDESTDOMAIN/wp-config.php" || SyncError "Unable To Add WP_HOME and WP_SITEURL in /var/www/$MIGDESTDOMAIN/wp-config.php"
+			echo -e "Added WP_HOME and WP_SITEURL to /var/www/$MIGDESTDOMAIN/wp-config.php"
 		fi
 
-		echo 
 		# Display Important Information After Completing rsync Process
-		echo -e "\033[34m IMPORTANT: Don't Forget To Use Search & Replace Plugin \n \e[0m"
+		echo -e "\033[34m \nIMPORTANT: Don't Forget To Use Search & Replace Plugin \n \e[0m"
 
 		# Remove Config file from /tmp/ Directory and Database backup file from Destination
 		rm -f /tmp/$MIGDESTDOMAIN-wp-config.php
