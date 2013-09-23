@@ -14,14 +14,14 @@
 @daily /bin/bash /root/bin/mysqlstatus.sh | mail -s "$(hostname -f) MySQL Replication Status" mitesh.shah@rtcamp.com
 
 #Check HDD Space
-@daily	/bin/bash /root/bin/hddspace.sh
+@daily  /bin/bash /root/bin/hddspace.sh
 
 # Correct WebRoot Permissions
-0	2	*	*	*	/bin/bash /root/bin/fixpermission.sh
+0 2 * * * /bin/bash /root/bin/fixpermission.sh
 
 
 # ClamAV Scan
-10	2	*	*	*	/bin/bash /root/bin/customscan.sh
+10  2 * * * /bin/bash /root/bin/customscan.sh
 
 
 # Rsnapshot MySQL Script
@@ -33,6 +33,5 @@
 #Run Rsnapshot At 02:00 Everyday
 40      02      *       *       *       /usr/bin/rsnapshot daily
 
-#Run Rsnapshot At 06:00 Every Sunday 
+#Run Rsnapshot At 06:00 Every Sunday
 50      06      *       *       0       /usr/bin/rsnapshot weekly
-                                                    
