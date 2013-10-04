@@ -29,14 +29,16 @@ then
 	read -p " Enter Source Domain Name To rsync: " MIGSRCDOMAIN
 fi
 
+MIGSRCCONFIG=/var/www/$MIGSRCDOMAIN/wp-config.php
+
 # Check If wp-config.php file exist or not
-if [ -f /var/www/$MIGSRCDOMAIN/wp-config.php ]
+if [ -f $MIGSRCCONFIG ]
 then
 	MIGDBEXPORT=y
 elif [ -f /var/www/$MIGSRCDOMAIN/htdocs/wp-config.php ]
 then
 	MIGDBEXPORT=y
-	mv -v /var/www/$MIGSRCDOMAIN/htdocs/wp-config.php /var/www/$MIGSRCDOMAIN/wp-config.php
+	MIGSRCCONFIG=/var/www/$MIGSRCDOMAIN/htdocs/wp-config.php
 else
 	MIGDBEXPORT=n
 fi
@@ -44,9 +46,9 @@ fi
 if [ "$MIGDBEXPORT" == "y" ]
 then
 	# MySQL Informatiom
-	MIGSRCDBNAME=$(grep DB_NAME /var/www/$MIGSRCDOMAIN/wp-config.php | cut -d"'" -f4)
-	MIGSRCDBUSER=$(grep DB_USER /var/www/$MIGSRCDOMAIN/wp-config.php | cut -d"'" -f4)
-	MIGSRCDBPASS=$(grep DB_PASS /var/www/$MIGSRCDOMAIN/wp-config.php | cut -d"'" -f4)
+	MIGSRCDBNAME=$(grep DB_NAME $MIGSRCCONFIG | cut -d"'" -f4)
+	MIGSRCDBUSER=$(grep DB_USER $MIGSRCCONFIG | cut -d"'" -f4)
+	MIGSRCDBPASS=$(grep DB_PASS $MIGSRCCONFIG | cut -d"'" -f4)
 
 	echo -e "\n `date`" &>> $MIGRATELOG
 	echo -e "\n Source Domain = $MIGSRCDOMAIN \n Source DB Name = $MIGSRCDBNAME \n Source MySQL User = $MIGSRCDBUSER \n Source MySQL Password = $MIGSRCDBPASS" | tee -ai $MIGRATELOG
@@ -97,10 +99,16 @@ if [ "$MIGDBEXPORT" == "y" ]
 then
 	# Lets Import MySQL
 	echo -e "\033[34m Fetching Destination DB Name, DB User & DB Password...  \e[0m"
-	rsync -avzh $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/wp-config.php /tmp/ || SyncError "Unable To Fetch wp-config.php From $MIGDESTDOMAIN"
+	rsync -dmavzh --include "/*" --include "wp-config.php" --exclude "*" $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/wp-config.php /tmp/ || SyncError "Unable To Fetch wp-config.php From $MIGDESTDOMAIN"
 
 	# Rename wp-config file name to avoid conflict
-	mv /tmp/wp-config.php /tmp/$MIGDESTDOMAIN-wp-config.php
+	if [ -d /tmp/htdocs ]
+	then
+		mv /tmp/htdocs/wp-config.php /tmp/$MIGDESTDOMAIN-wp-config.php
+		rm -rf /tmp/htdocs
+	else
+		mv /tmp/wp-config.php /tmp/$MIGDESTDOMAIN-wp-config.php
+	fi
 
 	# Get Destination Database Name, Username and Password
 	MIGDESTDBNAME=$(grep DB_NAME /tmp/$MIGDESTDOMAIN-wp-config.php | cut -d"'" -f4)
@@ -136,9 +144,9 @@ then
 
 		if [ "$MIGSYNCUPLOAD" == "n" ]
 		then
-			rsync -avzh --exclude="wp-content/uploads/"  /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
+			rsync -avzh --exclude="wp-content/uploads/" --exclude="wp-config.php" /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
 		else
-			rsync -avzh /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
+			rsync -avzh --exclude="wp-config.php" /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
 		fi
 
 		# Ask for Import Database from Source to Destination
@@ -158,15 +166,15 @@ then
 			echo -e "\033[31m User Denied to Import Database from $MIGSRCDOMAIN to $MIGDESTDOMAIN \n \e[0m" | tee -ai $MIGRATELOG
 		fi
 	else
-		rsync -avzh /var/www/$MIGSRCDOMAIN/htdocs $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
+		rsync -avzh --exclude="wp-config.php" /var/www/$MIGSRCDOMAIN/htdocs $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
 	fi
 
 	if [ "$MIGDBEXPORT" == "y" ]
 	then
 		# Add WP_HOME and WP_SITEURL to wp-config.php file
-		if ! grep --quiet WP_HOME /tmp/$MIGDESTDOMAIN-wp-config.php && ! grep --quiet WP_SITEURL /tmp/$MIGDESTDOMAIN-wp-config.php
+		if ! grep -w -q WP_HOME /tmp/$MIGDESTDOMAIN-wp-config.php && ! grep -w -q WP_SITEURL /tmp/$MIGDESTDOMAIN-wp-config.php
 		then
-			ssh $MIGDESTUSER@$MIGDESTIP -p $MIGDESTDBPORT "echo -e \"define( 'WP_HOME', 'http://$MIGDESTDOMAIN' ); \ndefine( 'WP_SITEURL', 'http://$MIGDESTDOMAIN' ); \" >> /var/www/$MIGDESTDOMAIN/wp-config.php" || SyncError "Unable To Add WP_HOME and WP_SITEURL in /var/www/$MIGDESTDOMAIN/wp-config.php"
+			ssh $MIGDESTUSER@$MIGDESTIP -p $MIGDESTDBPORT "echo -e \"\ndefine( 'WP_HOME', 'http://$MIGDESTDOMAIN' ); \ndefine( 'WP_SITEURL', 'http://$MIGDESTDOMAIN' ); \" >> /var/www/$MIGDESTDOMAIN/wp-config.php" || SyncError "Unable To Add WP_HOME and WP_SITEURL in /var/www/$MIGDESTDOMAIN/wp-config.php"
 			echo -e "Added WP_HOME and WP_SITEURL to /var/www/$MIGDESTDOMAIN/wp-config.php"
 		fi
 
