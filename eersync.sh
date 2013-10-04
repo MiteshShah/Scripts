@@ -144,11 +144,7 @@ then
 
 		if [ "$MIGSYNCUPLOAD" == "n" ]
 		then
-<<<<<<< HEAD
 			rsync -avzh --exclude="wp-content/uploads/" --exclude="wp-config.php" /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
-=======
-			rsync -avzh --exclude="wp-content/uploads/" /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
->>>>>>> 7b8f704306ce9528796bcbe2ec9321aec2763e27
 		else
 			rsync -avzh --exclude="wp-config.php" /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
 		fi
