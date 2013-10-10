@@ -15,7 +15,7 @@ do
 	then
 
 		# Send Details To Log Files
-		echo "The LIVE-SERVER Is Running, Sending Changes From LIVE-SERVER To BACKUP-SERVER:" >> /var/log/sync-with-inotify.log
+		echo "The LIVE-SERVER Is Running, Sending Changes From LIVE-SERVER To BACKUP-SERVER:"
 
 		# Start Synchronisation
 		#rsync -avz --delete /var/www root@BACKUP-SERVER-IP:/var/
@@ -25,18 +25,18 @@ do
 		if [ $? != 0 ]
 		then
 
-			echo "[+] Checking Server Health Script Is Already Running Or Not" >> /var/log/sync-with-inotify.log
+			echo "[+] Checking Server Health Script Is Already Running Or Not"
 			ps ax | grep check-server-health.sh | grep -v grep
 
 			if [ $? != 0 ]
 			then
-				echo "[+] Starting Check Server Health Script" >> /var/log/sync-with-inotify.log
+				echo "[+] Starting Check Server Health Script"
 				bash /root/bin/check-server-health.sh &
 			fi
 		fi
 		
 	else
 		# Send Details To Log Files
-		echo "The BACKUP-SERVER Is Running, Can't Sending Changes From LIVE-SERVER To BACKUP-SERVER:" >> /var/log/sync-with-inotify.log
+		echo "The BACKUP-SERVER Is Running, Can't Sending Changes From LIVE-SERVER To BACKUP-SERVER:"
 	fi
 done
