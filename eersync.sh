@@ -144,9 +144,9 @@ then
 
 		if [ "$MIGSYNCUPLOAD" == "n" ]
 		then
-			rsync -avzh --exclude="wp-content/uploads/" /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
+			rsync -avzh --exclude="wp-content/uploads/" --exclude="wp-config.php" /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
 		else
-			rsync -avzh /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
+			rsync -avzh --exclude="wp-config.php" /var/www/$MIGSRCDOMAIN/htdocs /var/www/$MIGSRCDOMAIN/backup/$MIGSRCDBNAME.sql $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
 		fi
 
 		# Ask for Import Database from Source to Destination
@@ -166,7 +166,7 @@ then
 			echo -e "\033[31m User Denied to Import Database from $MIGSRCDOMAIN to $MIGDESTDOMAIN \n \e[0m" | tee -ai $MIGRATELOG
 		fi
 	else
-		rsync -avzh /var/www/$MIGSRCDOMAIN/htdocs $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
+		rsync -avzh --exclude="wp-config.php" /var/www/$MIGSRCDOMAIN/htdocs $MIGDESTUSER@$MIGDESTIP:/var/www/$MIGDESTDOMAIN/ || SyncError "Unable To Sync $MIGSRCDOMAIN To $MIGDESTDOMAIN"
 	fi
 
 	if [ "$MIGDBEXPORT" == "y" ]
