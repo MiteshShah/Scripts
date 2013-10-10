@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Add Crontab To Auto Start Scripts
+#@reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
+
 while true
 do
 
