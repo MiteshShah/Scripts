@@ -8,7 +8,7 @@ do
 	# Detect Server:
 	# Detect.txt is soft linked to /usr/local/bin/Detect.txt
 	# Detect.txt Contains Uniq Live/Backup Server Identify Strings
-	curl -s DOMAIN.com/Detect.txt | grep LIVESERVERNAME
+	curl -sL DOMAIN.com/Detect.txt | grep -i LIVESERVERNAME
 	
 
 	if [ $? -eq 0 ]
