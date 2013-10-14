@@ -6,7 +6,7 @@
 @reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
 
 # Check MySQL Replication Status
-@daily /bin/bash /root/bin/mysqlstatus.sh | mail -s "Haute Mysql Replication Status" mitesh.shah@rtcamp.com
+@daily /bin/bash /root/bin/mysqlstatus.sh | mail -s "$(hostname) Mysql Replication Status" mitesh.shah@rtcamp.com
 
 #Check HDD Space
 @daily	/bin/bash /root/bin/hddspace.sh
