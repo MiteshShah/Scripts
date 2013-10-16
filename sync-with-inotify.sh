@@ -1,7 +1,16 @@
 #!/bin/bash
 
+
+
 # Add Crontab To Auto Start Scripts
-#@reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
+# @reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
+
+# Configure Variables
+DOMAIN=
+SERVER1=
+SERVER2=
+SERVER2IP=
+
 
 while true
 do
@@ -12,18 +21,18 @@ do
 	# Detect Server:
 	# Detect.txt is soft linked to /usr/local/bin/Detect.txt
 	# Detect.txt Contains Uniq Live/Backup Server Identify Strings
-	curl -sL DOMAIN.com/Detect.txt | grep -i LIVESERVERNAME
+	curl -sL $DOMAIN/Detect.txt | grep -i $SERVER1
 	
 
 	if [ $? -eq 0 ]
 	then
 
 		# Send Details To Log Files
-		echo "The LIVE-SERVER Is Running, Sending Changes From LIVE-SERVER To BACKUP-SERVER:"
+		echo "The $SERVER1 Server Is Running, Sending Changes From $SERVER1 To $SERVER2:"
 
 		# Start Synchronisation
 		#rsync -avz --delete /var/www root@BACKUP-SERVER-IP:/var/
-		rsync -avz /var/www root@LIVE-SERVER-IP:/var/
+		rsync -avz /var/www root@$SERVER2IP:/var/
 	
 		# If Rsync Fails
 		if [ $? != 0 ]
@@ -41,6 +50,6 @@ do
 		
 	else
 		# Send Details To Log Files
-		echo "The BACKUP-SERVER Is Running, Can't Sending Changes From LIVE-SERVER To BACKUP-SERVER:"
+		echo "The $SERVER2 Is Running, Can't Sending Changes From $SERVER1 To $SERVER2:"
 	fi
 done
