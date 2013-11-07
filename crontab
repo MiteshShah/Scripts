@@ -3,6 +3,9 @@
 @reboot		/bin/bash /root/bin/monitor-ssh-keys.sh &
 
 # Sync Webroot
+@reboot /bin/bash /root/bin/unison-inotify.sh &>> /var/log/unison-inotify.sh.log &
+
+# Sync Webroot
 @reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
 
 # Check MySQL Replication Status
