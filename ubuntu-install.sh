@@ -54,16 +54,16 @@ sudo apt-get update || OwnError "Updating Cache Failed :("
 #Install Common Softwares
 clear
 echo "Installing Git Vim Filezilla Google-Chrome Skype Oracle-Jdk"
-sudo apt-get -y install git-core openssh-server shutter pv vim vlc curl filezilla google-chrome-stable skype sni-qt sni-qt:i386 libasound2-plugins:i386 openjdk-7-jre icedtea-7-plugin openjdk-7-jdk || OwnError "Installation Failed :("
+sudo apt-get -y install git-core openssh-server shutter pv vim vlc curl filezilla google-chrome-stable skype sni-qt sni-qt:i386 libasound2-plugins:i386 openjdk-7-jre icedtea-7-plugin openjdk-7-jdk diodon diodon-plugins || OwnError "Installation Failed :("
 
 #Install Netbeans
 clear
 echo "Downloading Netbeans..."
-wget -c http://mitesh.rtcamp.info/Linux/netbeans-7.3.1-php-linux.sh
-wget -c http://dlc.sun.com.edgesuite.net/netbeans/7.3.1/final/bundles/netbeans-7.3.1-php-linux.sh || OwnError "Unable to download Netbeans :("
-chmod u+x netbeans-7.3.1-php-linux.sh
+wget -c http://mitesh.rtcamp.info/Linux/netbeans-7.4-php-linux.sh
+wget -c http://dlc.sun.com.edgesuite.net/netbeans/7.4/final/bundles/netbeans-7.4-php-linux.sh || OwnError "Unable to download Netbeans :("
+chmod u+x netbeans-7.4-php-linux.sh
 echo "Installing Netbeans..."
-sudo bash netbeans-7.3.1-php-linux.sh || OwnError "Unable to install Netbeans :("
+sudo bash netbeans-7.4-php-linux.sh || OwnError "Unable to install Netbeans :("
 clear
 
 
