@@ -32,8 +32,8 @@ sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" > /etc
 #Opera Repository 
 clear
 echo "Install Repository For Opera..."
-wget -q -O - http://deb.opera.com/archive.key | sudo apt-key add - || OwnError "Unable To Fetch Opera Repository  :("
-sudo sh -c 'echo "deb http://deb.opera.com/opera/ stable non-free" >> /etc/apt/sources.list.d/opera.list' || OwnError "Unable To Add Opera Repository  :("
+sudo sh -c 'echo "deb http://deb.opera.com/opera/ stable non-free" >> /etc/apt/sources.list.d/opera.list' || OwnError "Unable To Fetch Opera Repository  :("
+sudo sh -c 'wget -O - http://deb.opera.com/archive.key | apt-key add -'
 
 #Skype Repository 
 clear
@@ -53,8 +53,8 @@ sudo apt-get update || OwnError "Updating Cache Failed :("
 
 #Install Common Softwares
 clear
-echo "Installing Git Vim Filezilla Google-Chrome Skype Oracle-Jdk"
-sudo apt-get -y install git-core openssh-server shutter pv vim vlc curl filezilla google-chrome-stable skype sni-qt sni-qt:i386 libasound2-plugins:i386 openjdk-7-jre icedtea-7-plugin openjdk-7-jdk diodon diodon-plugins || OwnError "Installation Failed :("
+echo "Installing Git Vim Filezilla Google-Chrome Skype Oracle-Jdk Opera"
+sudo apt-get -y install git-core openssh-server shutter pv vim vlc curl filezilla google-chrome-stable skype sni-qt sni-qt:i386 libasound2-plugins:i386 openjdk-7-jre icedtea-7-plugin openjdk-7-jdk diodon diodon-plugins opera || OwnError "Installation Failed :("
 
 #Install Netbeans
 clear
