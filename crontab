@@ -3,7 +3,7 @@
 @reboot		/bin/bash /root/bin/monitor-ssh-keys.sh &
 
 # Sync Webroot
-@reboot /bin/bash /root/bin/unison-inotify.sh &>> /var/log/unison-inotify.sh.log &
+@reboot /bin/bash /root/bin/sync-webroot.sh &>> /var/log/sync-webroot.sh.log &
 
 # Sync Webroot
 @reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
