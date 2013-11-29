@@ -6,13 +6,12 @@ SERVER2IP=
 
 while true
 do
-	# Select Live/Backup Server
+	# Check Server2 Become A Live
 	ping -c1 $SERVER2IP &> /dev/null
 	
 	if [ $? == 0 ]
 	then
 		echo "[+] Server Becomes Alive ......"
-		#rsync --temp-dir=/tmp -avz /var/www root@LIVE-SERVER-IP:/var/
 		rsync --temp-dir=/tmp -avz /var/www root@$SERVER2IP:/var/
 		exit 0;
 	fi
