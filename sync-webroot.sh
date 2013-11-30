@@ -21,7 +21,7 @@ do
 	echo "Sending Changes From $SERVER1 To $SERVER2:"
 
 	# Start Synchronisation
-	rsync --temp-dir=/tmp -avz /var/www root@$SERVER2IP:/var/
+	rsync -avz --temp-dir=/tmp /var/www root@$SERVER2IP:/var/
 
 	# If Rsync Fails
 	if [ $? != 0 ]
