@@ -18,7 +18,7 @@ do
 	inotifywait --exclude .swp ~  -r -e create -e modify -e delete -e move -e attrib --format %e:%f /var/www/
 
 	# Send Details To Log Files
-	echo "Sending Changes From $SERVER1 To $SERVER2:"
+	echo "[$(date)] Sending Changes From $SERVER1 To $SERVER2:"
 
 	# Start Synchronisation
 	rsync -avz --temp-dir=/tmp /var/www root@$SERVER2IP:/var/
