@@ -15,7 +15,7 @@ while true
 do
 
 	# Monitor Files Changes For Create, Delete, Move, File Permissions
-	inotifywait --exclude .swp ~  -r -e create -e modify -e delete -e move -e attrib --format %e:%f /var/www/
+	inotifywait --exclude .swp -r -e create -e modify -e delete -e move -e attrib --format %e:%f /var/www/
 
 	# Send Details To Log Files
 	echo "[$(date)] Sending Changes From $SERVER1 To $SERVER2:"
