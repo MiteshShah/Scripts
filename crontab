@@ -1,6 +1,6 @@
 
 # Start Monitoring SSH Authorised Keys
-@reboot		/bin/bash /root/bin/monitor-ssh-keys.sh &
+@reboot /bin/bash /root/bin/monitor-ssh-keys.sh &
 
 # Sync Webroot
 @reboot /bin/bash /root/bin/sync-webroot.sh &>> /var/log/sync-webroot.sh.log &
@@ -9,7 +9,7 @@
 @reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
 
 # Check MySQL Replication Status
-@daily /bin/bash /root/bin/mysqlstatus.sh | mail -s "$(hostname) MySQL Replication Status" mitesh.shah@rtcamp.com
+@daily /bin/bash /root/bin/mysqlstatus.sh | mail -s "$(hostname -f) MySQL Replication Status" mitesh.shah@rtcamp.com
 
 #Check HDD Space
 @daily	/bin/bash /root/bin/hddspace.sh
@@ -19,7 +19,7 @@
 
 
 # ClamAV Scan
-10	2	*	*	*	clamscan -r -i / | mail -s "ClamAv Scan Result For `hostname`"  Mitesh.Shah@rtcamp.com
+10	2	*	*	*	clamscan -r -i / | mail -s "ClamAv Scan Result For $(hostname -f)"  Mitesh.Shah@rtcamp.com
 
 
 # Rsnapshot MySQL Script
