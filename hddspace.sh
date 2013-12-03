@@ -10,17 +10,17 @@ do
 		(df -h | head -n1; df -h | grep $i; \
 		echo; echo "Total Disk Space Used By /tmp = $(du -sh /tmp | awk '{print$1}')"; \
 		echo; echo "Total Disk Space Used By /var/log = $(du -sh /var/log | awk '{print$1}')") \
-		| mail -s "HDD Space Warning For $(hostname)" Mitesh.Shah@rtcamp.com
+		| mail -s "HDD Space Warning For $(hostname -f)" Mitesh.Shah@rtcamp.com
 
 	elif [ $i -gt 85 ]
 	then
 		(df -h | head -n1; df -h | grep $i) \
-		| mail -s "HDD Space Warning For $(hostname)" Mitesh.Shah@rtcamp.com
+		| mail -s "HDD Space Warning For $(hostname -f)" Mitesh.Shah@rtcamp.com
 
 	elif [ $i -gt 80 ]
 	then
 		(df -h | head -n1; df -h | grep $i) \
-		| mail -s "HDD Space Warning For $(hostname)" Mitesh.Shah@rtcamp.com
+		| mail -s "HDD Space Warning For $(hostname -f)" Mitesh.Shah@rtcamp.com
 
 	fi
 done
