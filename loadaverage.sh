@@ -19,7 +19,7 @@ NOTIFY="22.0"
 # admin user email id
 EMAIL="Mitesh.Shah@rtcamp.com"
 # Subject for email
-SUBJECT="Alert $(hostname) load average"
+SUBJECT="Alert $(hostname -f) load average"
 # -----------------------------------------------------------------
 # Os Specifc tweaks do not change anything below ;)
 OS="$(uname)"
@@ -41,7 +41,7 @@ F15M="$(uptime | awk -F "$FTEXT" '{ print $2 }' | cut -d, -f3)"
 # mail message
 # keep it short coz we may send it to page or as an short message (SMS)
 echo "Load average Crossed allowed limit $NOTIFY." >> $TEMPFILE
-echo "Hostname: $(hostname)" >> $TEMPFILE
+echo "Hostname: $(hostname -f)" >> $TEMPFILE
 echo "Local Date & Time : $(date)" >> $TEMPFILE
 # Look if it crossed limit
 # compare it with last 15 min load average
