@@ -11,7 +11,7 @@ do
 	
 	if [ $? == 0 ]
 	then
-		echo "[+] Server Becomes Alive ......"
+		echo "[+] Server Becomes Alive......"
 		rsync -avz --temp-dir=/tmp /var/www root@$SERVER2IP:/var/
 		exit 0;
 	fi

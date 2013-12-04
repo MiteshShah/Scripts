@@ -3,7 +3,7 @@
 
 
 # Add Crontab To Auto Start Scripts
-# @reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
+# @reboot /bin/bash /root/bin/sync-webroot.sh &>> /var/log/sync-webroot.sh.log &
 
 # Configure Variables
 SERVER1=
