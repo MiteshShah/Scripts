@@ -16,24 +16,20 @@ while true
 do
 
 	# Monitor Files Changes For Create, Delete, Move, File Permissions
-	inotifywait --exclude .swp -r -e create -e modify -e delete -e move -e attrib --format %e:%w%f /var/www/
+	inotifywait --exclude .swp -r -e create -e modify -e delete -e move -e attrib --format %e:%f /var/www/
 
-	# Detect Server:
-	# Detect.txt is soft linked to /usr/local/bin/Detect.txt
-	# Detect.txt Contains Uniq Live/Backup Server Identify Strings
-	curl -sL $DOMAIN/Detect.txt | grep -i $SERVER1
-	
+	# Detect WebServer
+	curl -sI $DOMAIN/wp-admin/ | grep rt-server | grep $SERVER1
 
 	if [ $? -eq 0 ]
 	then
-
 		# Send Details To Log Files
-		echo "The $SERVER1 Server Is Running, Sending Changes From $SERVER1 To $SERVER2:"
+		echo "[$(date)] Sending Changes From $SERVER1 To $SERVER2:"
 
 		# Start Synchronisation
-		#rsync --temp-dir=/tmp -avz --delete /var/www root@BACKUP-SERVER-IP:/var/
-		rsync --temp-dir=/tmp -avz /var/www root@$SERVER2IP:/var/
-	
+		#rsync -avz --delete --temp-dir=/tmp /var/www root@$SERVER2IP:/var/
+		rsync -avz --temp-dir=/tmp /var/www root@$SERVER2IP:/var/
+
 		# If Rsync Fails
 		if [ $? != 0 ]
 		then
@@ -44,12 +40,12 @@ do
 			if [ $? != 0 ]
 			then
 				echo "[+] Starting Check Server Health Script"
-				bash /root/bin/check-server-health.sh &
+				/bin/bash /root/bin/check-server-health.sh &
 			fi
 		fi
-		
+
 	else
 		# Send Details To Log Files
-		echo "The $SERVER2 Is Running, Can't Sending Changes From $SERVER1 To $SERVER2:"
+		echo "The $SERVER2 Is Running, Can't Send Changes From $SERVER1 To $SERVER2:"
 	fi
 done
