@@ -2,11 +2,11 @@
 # Start Monitoring SSH Authorised Keys
 @reboot /bin/bash /root/bin/monitor-ssh-keys.sh &
 
-# Sync Webroot
-@reboot /bin/bash /root/bin/sync-webroot.sh &>> /var/log/sync-webroot.sh.log &
+# Sync Webroot (1h To Get Contents From Backup Server Before Start rsync With --delete Flags)
+@reboot sleep 1h; /bin/bash /root/bin/sync-webroot.sh &>> /var/log/sync-webroot.sh.log &
 
-# Sync Webroot
-@reboot /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
+# Sync Webroot (1h To Get Contents From Backup Server Before Start rsync With --delete Flags)
+@reboot sleep 1h; /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
 
 # Check MySQL Replication Status
 @daily /bin/bash /root/bin/mysqlstatus.sh | mail -s "$(hostname -f) MySQL Replication Status" mitesh.shah@rtcamp.com
