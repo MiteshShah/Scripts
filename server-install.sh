@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install Python Software Properties
+apt-get install python-software-properties
+
 # Add Glances Monitor Tool Repository
 add-apt-repository ppa:arnaud-hartmann/glances-stable
 
