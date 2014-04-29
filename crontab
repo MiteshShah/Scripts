@@ -1,4 +1,3 @@
-
 # Start Monitoring SSH Authorised Keys
 @reboot /bin/bash /root/bin/monitor-ssh-keys.sh &
 
@@ -23,13 +22,14 @@
 
 
 # Rsnapshot MySQL Script
-30      4       *       *       *       /bin/bash /root/bin/rsnap-mysql.sh
+20      *       *       *       *       /bin/bash /root/bin/rsnap-mysql.sh
 
-#Run Rsnapshot At EveryHour
-00      *      *       *       *       /usr/bin/rsnapshot hourly
+#Run Rsnapshot hourly
+00      *       *       *       *       /usr/bin/rsnapshot hourly
 
 #Run Rsnapshot At 02:00 Everyday
-00      02      *       *       *       /usr/bin/rsnapshot daily
+40      02      *       *       *       /usr/bin/rsnapshot daily
 
 #Run Rsnapshot At 06:00 Every Sunday 
-00      06      *       *       0       /usr/bin/rsnapshot weekly
+50      06      *       *       0       /usr/bin/rsnapshot weekly
+-- INSERT --                                                       
