@@ -117,7 +117,13 @@ backup_mysql_rsnapshot(){
                 local TIME=$(date +"$TIME_FORMAT")
                 local FILE="$RsnapROOT/$db.$TIME.gz"
 		[ $LOGS -eq 1 ] && echo -e \\t "$db" &>> $RsnapLOGS/rsnap-mysql.log
-                $MYSQLDUMP --single-transaction -u $MySQLUSER -h $HOSTIP -p$MySQLPASS $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
+		
+		if [  $db = "mysql" ]
+		then
+                	$MYSQLDUMP --events --single-transaction -u $MySQLUSER -h $HOSTIP -p$MySQLPASS $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
+                else
+                	$MYSQLDUMP --single-transaction -u $MySQLUSER -h $HOSTIP -p$MySQLPASS $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
+                fi
         done
 		[ $LOGS -eq 1 ] && echo "*** Backup Finished At $(date) [ files wrote to $RsnapROOT] ***" &>> $RsnapLOGS/rsnap-mysql.log
 }
