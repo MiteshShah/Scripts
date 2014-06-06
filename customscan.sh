@@ -8,10 +8,10 @@
 is_sunday=$(date +%u)
 
 if [ $is_sunday -eq 7 ];then
-	echo "Today is Sunday, Full Scan Running...."
+	echo "Full clamscan is running...."
 	clamscan --exclude=/proc --exclude=/sys --exclude=/dev -r -i / 
 else
-	echo "Today is not Sunday, Running scan for file modified is last 24 hours"
+	echo "Running clamscan for file modified in last 24 hours...."
 	is_running=$(ps -ef | grep clamscan | grep -v grep | wc -l)
 	if [ $is_running -eq 0 ];then
 		find / -not -wholename '/sys/*' -and -not -wholename '/proc/*' -mtime -1 -type f -print0 | xargs -0 -r clamscan -i 
