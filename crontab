@@ -18,7 +18,7 @@
 
 
 # ClamAV Scan
-10	2	*	*	*	clamscan --exclude=/proc --exclude=/sys --exclude=/dev -r -i / | mail -s "ClamAv Scan Result For $(hostname -f)"  Mitesh.Shah@rtcamp.com
+10	2	*	*	*	/bin/bash /root/bin/customscan.sh | mail -s "ClamAv Scan Result For $(hostname -f)"  Mitesh.Shah@rtcamp.com
 
 
 # Rsnapshot MySQL Script
