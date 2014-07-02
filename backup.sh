@@ -1,18 +1,34 @@
 #!/bin/bash
 
+# Export some ENV variables so you don't have to type anything
+export AWS_ACCESS_KEY_ID=""
+export AWS_SECRET_ACCESS_KEY=""
+export PASSPHRASE=""
+
+# Your GPG key
+GPG_KEY=
+
+# The S3 destination followed by bucket name
+DEST="s3://s3.amazonaws.com//"
+
+
 # Set up some variables for logging
 LOGFILE="/var/log/duplicity/backup.log"
 DAILYLOGFILE="/var/log/duplicity/backup.daily.log"
 FULLBACKLOGFILE="/var/log/duplicity/backup.full.log"
 HOST=`hostname`
 DATE=`date +%Y-%m-%d`
-MAILADDR="sys@rtcamp.com"
+MAILADDR=""
 TODAY=$(date +%d%m%Y)
 
-is_running=$(ps -ef | grep duplicity | grep -v grep | wc -l)
+is_running=$(ps -ef | grep duplicity  | grep python | wc -l)
 
 if [ ! -d /var/log/duplicity ];then
     mkdir -p /var/log/duplicity
+fi
+
+if [ ! -f $FULLBACKLOGFILE ]; then
+    touch $FULLBACKLOGFILE
 fi
 
 if [ $is_running -eq 0 ]; then
@@ -25,26 +41,15 @@ if [ $is_running -eq 0 ]; then
             echo "$stamp: $*" >> ${DAILYLOGFILE}
     }
 
-    # Export some ENV variables so you don't have to type anything
-    export AWS_ACCESS_KEY_ID=""
-    export AWS_SECRET_ACCESS_KEY=""
-    export PASSPHRASE=""
-
-    # Your GPG key
-    GPG_KEY=
-
     # How long to keep backups for
     OLDER_THAN="1M"
 
     # The source of your backup
     SOURCE=/
 
-    # The S3 destination followed by bucket name
-    DEST="s3://s3.amazonaws.com//"
-
     FULL=
-    tail -1 ${FULLBACKLOGFILE} | grep ${TODAY}
-    if [ $? -eq 0 && $(date +%d) -eq 1 ]; then
+    tail -1 ${FULLBACKLOGFILE} | grep ${TODAY} > /dev/null
+    if [ $? -ne 0 && $(date +%d) -eq 1 ]; then
             FULL=full
     fi;
 
@@ -74,7 +79,7 @@ if [ $is_running -eq 0 ]; then
     BACKUPSTATUS=`cat "$DAILYLOGFILE" | grep Errors | awk '{ print $2 }'`
     if [ "$BACKUPSTATUS" != "0" ]; then
 	   cat "$DAILYLOGFILE" | mail -s "Duplicity Backup Log for $HOST - $DATE" $MAILADDR
-    elif [ $FULL == "full"]
+    elif [ $FULL = "full" ]; then
         echo "$(date +%d%m%Y_%T) Full Back Done" >> $FULLBACKLOGFILE
     fi
 
