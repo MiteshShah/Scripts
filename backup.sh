@@ -79,7 +79,7 @@ if [ $is_running -eq 0 ]; then
     BACKUPSTATUS=`cat "$DAILYLOGFILE" | grep Errors | awk '{ print $2 }'`
     if [ "$BACKUPSTATUS" != "0" ]; then
 	   cat "$DAILYLOGFILE" | mail -s "Duplicity Backup Log for $HOST - $DATE" $MAILADDR
-    elif [ $FULL = "full" ]; then
+    elif [ "$FULL" = "full" ]; then
         echo "$(date +%d%m%Y_%T) Full Back Done" >> $FULLBACKLOGFILE
     fi
 
