@@ -49,7 +49,7 @@ if [ $is_running -eq 0 ]; then
 
     FULL=
     tail -1 ${FULLBACKLOGFILE} | grep ${TODAY} > /dev/null
-    if [ $? -ne 0 && $(date +%d) -eq 1 ]; then
+    if [ $? -ne 0 -a $(date +%d) -eq 1 ]; then
             FULL=full
     fi;
 
