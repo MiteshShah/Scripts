@@ -14,7 +14,7 @@ if [ ! -d  /var/log/clamscan ];then
 	mkdir -p /var/log/clamscan
 fi
 
-touch $daily_log
+> $daily_log
 
 if [ $is_sunday -eq 7 ];then
 	echo "Full clamscan is running...." >> $daily_log
