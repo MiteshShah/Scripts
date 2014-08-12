@@ -23,17 +23,11 @@ else
 	echo "Running clamscan for file modified in last 24 hours...." >> $daily_log
 	is_running=$(ps -ef | grep clamscan | grep -v grep | wc -l)
 	if [ $is_running -eq 0 ];then
-		find / -not -wholename '/sys/*' -and -not -wholename '/proc/*' -mtime -1 -type f > /tmp/filetoscan.txt
-		fileSize=$(wc -l $tmp_file | awk '{print $1}')
-		n=$filetoscan
-		while [ ! $fileSize -lt $(($n-$filetoscan)) ];do 
-			head -$n $tmp_file | tail -$filetoscan | xargs -r clamscan -i &>> $daily_log
-			n=$(($n + $filetoscan))
-		done
+		find / -not -wholename '/sys/*' -and -not -wholename '/proc/*' -mtime -1 -type f -print0 | xargs -0 -r clamscan -i >> $daily_log
 	fi
 fi
 
-grep -v /home/clamav/infected/ $daily_log | grep FOUND
+grep -v /home/clamav/infected/ $daily_log | grep 'FOUND '
 if [ $? -eq 0 ];then
 	cat $daily_log | mail -s "Virus found on $(hostname)" $mailid
 fi
