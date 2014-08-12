@@ -17,8 +17,8 @@ fi
 touch $daily_log
 
 if [ $is_sunday -eq 7 ];then
-	echo "Full clamscan is running...." > $daily_log
-	clamscan --exclude=/proc --exclude=/sys --exclude=/dev -r -i / > $daily_log
+	echo "Full clamscan is running...." >> $daily_log
+	clamscan --exclude=/proc --exclude=/sys --exclude=/dev -r -i / >> $daily_log
 else
 	echo "Running clamscan for file modified in last 24 hours...." >> $daily_log
 	is_running=$(ps -ef | grep clamscan | grep -v grep | wc -l)
