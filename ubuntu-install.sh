@@ -38,7 +38,7 @@ sudo sh -c 'wget -O - http://deb.opera.com/archive.key | apt-key add -'
 #Skype Repository 
 clear
 echo "Install Repository For Skype..."
-sudo sh -c  'echo "deb http://archive.canonical.com/ubuntu/ raring partner" >> /etc/apt/sources.list.d/canonical_partner.list' || OwnError "Unable To Add Skype Repository  :("
+sudo sh -c  'echo "deb http://archive.canonical.com/ubuntu/ $(lsb_release -sc) partner" >> /etc/apt/sources.list.d/canonical_partner.list' || OwnError "Unable To Add Skype Repository  :("
 
 #Shutter Repository
 clear
@@ -67,7 +67,7 @@ clear
 
 
 #Install Web Server
-curl -sL rt.cx/ee | sudo bash || OwnError "Unable to clone ee :("
+wget -qO ee rt.cx/ee && sudo bash ee || OwnError "Unable to clone ee :("
 source /etc/bash_completion.d/ee || OwnError "Unable to source ee autocompletion :("
 echo
 echo "All Task Susscessfully Finished........"
