@@ -29,6 +29,6 @@ fi
 
 grep -v /home/clamav/infected/ $daily_log | grep ' FOUND'
 if [ $? -eq 0 ];then
-	cat $daily_log | mail -s "Virus found on $(hostname)" $mailid
+	cat $daily_log | mail -s "ClamAv Result For $(hostname)" $mailid
 fi
 cat $daily_log >> $log
