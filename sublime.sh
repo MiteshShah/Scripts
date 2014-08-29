@@ -4,8 +4,8 @@
 
 # Lets Download SubLime Text Editor
 cd /opt/
-wget -c http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3059_x64.tar.bz2
-tar -xvjf "sublime_text_3_build_3059_x64.tar.bz2"
+wget -c http://c758482.r82.cf2.rackcdn.com/sublime_text_3_build_3065_x64.tar.bz2
+tar -xvjf "sublime_text_3_build_3065_x64.tar.bz2"
 mv /opt/sublime_text_3 /opt/sublime-text-3
 
 # Desktop Entry
