@@ -42,7 +42,7 @@ sudo sh -c  'echo "deb http://archive.canonical.com/ubuntu/ $(lsb_release -sc) p
 
 #NodeJs Repository
 clear
-echo "Install Repository For Shutter..."
+echo "Install Repository For NodeJs..."
 sudo add-apt-repository -y ppa:chris-lea/node.js || OwnError "Unable To NodeJs Repository  :("
 
 #Shutter Repository
