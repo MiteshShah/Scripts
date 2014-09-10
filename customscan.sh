@@ -18,12 +18,12 @@ fi
 
 if [ $is_sunday -eq 7 ];then
 	echo "Full clamscan is running...." >> $daily_log
-	clamscan --exclude=/proc --exclude=/sys --exclude=/dev -r -i / >> $daily_log
+	clamscan --exclude=/proc --exclude=/sys --exclude=/dev --exclude=/var/run/nginx-cache --exclude=/run/nginx-cache -r -i / >> $daily_log
 else
 	echo "Running clamscan for file modified in last 24 hours...." >> $daily_log
 	is_running=$(ps -ef | grep clamscan | grep -v grep | wc -l)
 	if [ $is_running -eq 0 ];then
-		find / -not -wholename '/sys/*' -and -not -wholename '/proc/*' -mtime -1 -type f -print0 | xargs -0 -r clamscan -i >> $daily_log
+		find / -not -wholename '/sys/*' -and -not -wholename '/proc/*' -and -not -wholename '/run/nginx-cache/*' -and -not -wholename '/var/run/nginx-cache/*' -mtime -1 -type f -print0 | xargs -0 -r clamscan -i >> $daily_log
 	fi
 fi
 
