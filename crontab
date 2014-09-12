@@ -7,6 +7,9 @@
 # Sync Webroot (1h To Get Contents From Backup Server Before Start rsync With --delete Flags)
 @reboot sleep 1h; /bin/bash /root/bin/sync-with-inotify.sh &>> /var/log/sync-with-inotify.log &
 
+# Apply iptable rules on server reboot
+@reboot iptables-restore < /root/bin/iptables.rules
+
 # Check MySQL Replication Status
 @daily /bin/bash /root/bin/mysqlstatus.sh | mail -s "$(hostname -f) MySQL Replication Status" mitesh.shah@rtcamp.com
 
