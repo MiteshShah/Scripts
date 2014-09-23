@@ -48,6 +48,7 @@ TIME_FORMAT='%d%b%Y%H%M%S'
 ### Setup Dump And Log Directory ###
 RsnapROOT=/var/rsnap-mysql
 RsnapLOGS=/var/log/rsnap-mysql
+EXTRA_PARAMS=$1
 
 #####################################
 ### ----[ No Editing below ]------###
@@ -101,9 +102,9 @@ backup_mysql_rsnapshot(){
 		
 		if [  $db = "mysql" ]
 		then
-                	$MYSQLDUMP --events --single-transaction $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
+                	$MYSQLDUMP --events --single-transaction $EXTRA_PARAMS $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
                 else
-                	$MYSQLDUMP --single-transaction $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
+                	$MYSQLDUMP --single-transaction $db $EXTRA_PARAMS | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
                 fi
         done
 		[ $LOGS -eq 1 ] && echo "*** Backup Finished At $(date) [ files wrote to $RsnapROOT] ***" &>> $RsnapLOGS/rsnap-mysql.log
