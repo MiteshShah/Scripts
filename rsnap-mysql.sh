@@ -39,35 +39,15 @@ MYSQL=/usr/bin/mysql
 MYSQLDUMP=/usr/bin/mysqldump
 MYSQLADMIN=/usr/bin/mysqladmin
 
-
-### SETUP MySQL LOGIN ###
-if [ -f ~/.my.cnf ]
-then
-	MySQLUSER=$(cat ~/.my.cnf | grep user | cut -d'=' -f2)
-	MySQLPASS=$(cat ~/.my.cnf | grep pass | cut -d'=' -f2)
-else
-	read -p "Enter The MySQL Username: " MySQLUSER
-
-	# Turn Off Echo For Passwords
-	stty -echo
-	read -p "Enter The MySQL Password: " MySQLPASS
-	stty echo
-	echo
-fi
-
-HOSTIP="127.0.0.1"
-
 ### Enable Log = 1 ###
 LOGS=1
 
 ### Default Time Format ###
 TIME_FORMAT='%d%b%Y%H%M%S'
  
-
 ### Setup Dump And Log Directory ###
 RsnapROOT=/var/rsnap-mysql
 RsnapLOGS=/var/log/rsnap-mysql
-
 
 #####################################
 ### ----[ No Editing below ]------###
@@ -79,6 +59,7 @@ die(){
 	exit 999
 }
 
+[ -f ~/.my.cnf ] || die "Error: ~/.my.cnf not found"
 
 ### Make Sure Bins Exists ###
 verify_bins(){
@@ -94,14 +75,14 @@ verify_bins(){
 
 ### Make Sure We Can Connect To The Server ###
 verify_mysql_connection(){
-	$MYSQLADMIN  -u $MySQLUSER -h $HOSTIP -p$MySQLPASS ping | $GREP 'alive' > /dev/null
+	$MYSQLADMIN  ping | $GREP 'alive' > /dev/null
 	[ $? -eq 0 ] || die "Error: Cannot connect to MySQL Server. Make sure username and password are set correctly in $0"
 }
 
 
 ### Make A Backup ###
 backup_mysql_rsnapshot(){
-        local DBS="$($MYSQL -u $MySQLUSER -h $HOSTIP -p$MySQLPASS -Bse 'show databases')"
+        local DBS="$($MYSQL -Bse 'show databases')"
         local db="";
 
 	[ ! -d $RsnapLOGS ] && $MKDIR -p $RsnapLOGS
@@ -120,9 +101,9 @@ backup_mysql_rsnapshot(){
 		
 		if [  $db = "mysql" ]
 		then
-                	$MYSQLDUMP --events --single-transaction -u $MySQLUSER -h $HOSTIP -p$MySQLPASS $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
+                	$MYSQLDUMP --events --single-transaction $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
                 else
-                	$MYSQLDUMP --single-transaction -u $MySQLUSER -h $HOSTIP -p$MySQLPASS $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
+                	$MYSQLDUMP --single-transaction $db | $GZIP -9 > $FILE || echo -e \\t \\t "MySQLDump Failed $db"
                 fi
         done
 		[ $LOGS -eq 1 ] && echo "*** Backup Finished At $(date) [ files wrote to $RsnapROOT] ***" &>> $RsnapLOGS/rsnap-mysql.log
