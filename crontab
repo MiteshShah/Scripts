@@ -25,7 +25,7 @@
 
 
 # Rsnapshot MySQL Script
-20      *       *       *       *       /bin/bash /root/bin/rsnap-mysql.sh
+20      *       *       *       *       /bin/bash /root/bin/mysqldump.sh
 
 #Run Rsnapshot hourly
 00      *       *       *       *       /usr/bin/rsnapshot hourly
