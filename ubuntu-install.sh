@@ -94,10 +94,10 @@ sudo npm install -g bower
 #Install Netbeans
 clear
 echo "Downloading Netbeans..."
-wget -c http://download.netbeans.org/netbeans/8.0/final/bundles/netbeans-8.0-php-linux.sh || OwnError "Unable to download Netbeans :("
-chmod u+x netbeans-8.0-php-linux.sh
+wget -c http://dlc-cdn.sun.com/netbeans/8.0.2/final/bundles/netbeans-8.0.2-php-linux.sh || OwnError "Unable to download Netbeans :("
+chmod u+x netbeans-8.0.2-php-linux.sh
 echo "Installing Netbeans..."
-sudo bash netbeans-8.0-php-linux.sh || OwnError "Unable to install Netbeans :("
+sudo bash netbeans-8.0.2-php-linux.sh || OwnError "Unable to install Netbeans :("
 clear
 
 
